@@ -20,10 +20,10 @@ section .text
 main:
 	push ebp
 	mov ebp, esp
-	rdtsc
+	rdtsc ; function for random number (will be available in eax)
 	mov ecx, 100
 	mov edx, 0
-	div ecx
+	div ecx ; eax % ecx, result eax - quotient, edx - remainder. Purpose - random number range [0,100]
 	mov [random_num], edx
 	push dword [attempts_count]
 	push prompt
@@ -32,11 +32,11 @@ main:
 guess_input:
 	push guess_num
 	push scanf_pattern
-	call scanf
+	call scanf ; read user guess
 	xor ecx, ecx
-	call clear_stdin
-	cmp eax, 0
-	jne guess_format_error
+	call clear_stdin ; scanf should have cleared stdin, but if input is invalid it's not doing it
+	cmp eax, 0 
+	jne guess_format_error ; if something was cleared than input of the scanf was invalid
 	add esp,8
 	mov al, [random_num]
 	mov bl, [guess_num]
