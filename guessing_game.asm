@@ -1,7 +1,7 @@
 global main
 extern printf 
 extern scanf
-extern getchar
+extern clear_stdin
 
 section .data
 	EOF equ -1
@@ -69,14 +69,3 @@ guess_format_error:
 	call printf
 	add esp, 4
 	jmp guess_input
-clear_stdin:
-	call getchar
-	cmp eax, NEW_LINE
-	je return
-	cmp eax, EOF
-	je return
-	inc ecx
-	jmp clear_stdin
-return:
-	mov eax, ecx
-	ret
