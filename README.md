@@ -2,7 +2,7 @@
 
 Guessing game created with [NASM](https://www.nasm.us/) for Linux x86, x86_64.
 
-##Features
+## Features
 + Random number is in range [0,100]
 + Implemented error-handling in case of the wrong guess input
 
