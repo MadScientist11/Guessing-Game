@@ -4,7 +4,7 @@ Guessing game created with [NASM](https://www.nasm.us/) for Linux x86, x86_64.
 
 ## Features
 + Random number is in range [0,100]
-+ Attempts limit(default is 7)
++ Attempts limit (default is 7)
 + Implemented error-handling in case of the wrong guess input
 
 ## Compile and run
