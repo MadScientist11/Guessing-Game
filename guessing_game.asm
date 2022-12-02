@@ -11,6 +11,7 @@ section .data
 	win_text db "You win!", NEW_LINE, 0x00
 	less_text db "It's less than that!", NEW_LINE, 0x00
 	higher_text db "It's higher than that!", NEW_LINE, 0x00
+	lose_text db "You lose!",NEW_LINE, 0x00
 	scanf_err_text db "Your guess is not a valid number, try again", NEW_LINE, 0x00
 	attempts_count db 0x7
 section .bss
@@ -30,18 +31,27 @@ main:
 	call printf
 	add esp, 8
 guess_input:
+	mov al, [attempts_count]
+	sub al, 1
+	mov [attempts_count], al
 	push guess_num
 	push scanf_pattern
 	call scanf ; read user guess
+	add esp, 8
 	xor ecx, ecx
 	call clear_stdin ; scanf should have cleared stdin, but if input is invalid it's not doing it
-	cmp eax, 0 
+	cmp eax, 0
 	jne guess_format_error ; if something was cleared than input of the scanf was invalid
-	add esp,8
 	mov al, [random_num]
 	mov bl, [guess_num]
 	cmp al, bl
 	je equal
+	pushf ; push eflags to the stack, preserve state to jump for less or higher later
+	xor ecx, ecx
+	mov ecx, [attempts_count]
+	cmp ecx, 0
+	je lose ; lose if there is 0 attempts left
+	popf
 	jl less
 	jg higher
 prolog:
@@ -64,6 +74,11 @@ higher:
 	call printf
 	add esp, 4
 	jmp guess_input
+lose:
+	push lose_text
+	call printf
+	add esp, 4
+	jmp prolog
 guess_format_error:
 	push scanf_err_text
 	call printf
